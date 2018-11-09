@@ -1,6 +1,10 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+####
+#### THIS API WAS FORKED FROM LevPasha@github.com
+####
+
 import requests
 import random
 import json
