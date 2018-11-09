@@ -3,6 +3,7 @@
 
 ####
 #### THIS API WAS FORKED FROM LevPasha@github.com
+#### AND TWEAKED BASED ON THIS APP'S NECESSITIES
 ####
 
 import requests
