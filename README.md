@@ -13,7 +13,7 @@
 | 2. Navigate to the directory | `cd instaBot` |
 | 3. Install the dependencies | `python setup.py install ` or  `pip install -r requirements.txt` |
 | 4. Run the app.py script  | `python app.py` |
-_if you are using **pycharm**:  replace getpass.getpass() method with input()_ 
+| NOTE | _if you are using **pycharm**:  replace getpass.getpass() method with input()_ |
 
 **=====================**
 #### Use at your own risk
