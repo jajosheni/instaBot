@@ -1,13 +1,13 @@
 ### only for personal use
-### AUTHOR: http://github.com/jajosheni
+### AUTHOR: github.com/jajosheni
 ### Instagram BOT
 
-import getpass
 import sys
 from InstagramAPI import InstagramAPI
 import time
 import random
 import _thread
+import getpass
 
 
 def login():
@@ -17,7 +17,7 @@ def login():
     print("Connecting...")
     global api
     api = (InstagramAPI(username, password))
-    if (api.login()):
+    if api.login():
         print("Login successful.")
     else:
         print("Cannot login, please check your credentials.")
@@ -97,7 +97,7 @@ def unfollowlist(ulist):
 
 
 def deleteunfollowers():
-    if(len(unfollowersID)==0):
+    if len(unfollowersID)==0:
         print("No unfollowers")
     else:
         print("{0} people unfollowed".format(unfollowlist(unfollowersID)))
@@ -118,7 +118,7 @@ def showstats():
     print("{0} unfollowing".format(len(unfollowersID)))
 
 def printusername(idnumber):
-    for i in range(0, len(followinglonglist) - 1):
+    for i in range(0, len(followinglonglist) - 1, 1):
         if idnumber == followinglonglist[i][0]:
             print(str(followinglonglist[i][0]) + " : " + str(followinglonglist[i][1]))
 
@@ -159,7 +159,7 @@ def followpeoplebyhashtag(threadName, hashtag):
             postID = eachJsonObject['caption']['media_id']
             userName = eachJsonObject['caption']['user']['username']
 
-            if(checkTarget(postuserID)):
+            if checkTarget(postuserID):
                 api.follow(postuserID)
                 this_p = [postuserID, userName]
                 followinglonglist.append(this_p)
@@ -172,8 +172,47 @@ def followpeoplebyhashtag(threadName, hashtag):
         print(" ")
     print("Followed {0} accounts...".format(total))
 
+def followLikers(m_id):
+    try:
+        print("Media Info:")
+        api.mediaInfo(m_id)
+        item = api.LastJson['items'][0]
+        pub_time = time.strftime('%d-%m-%Y %H:%M:%S', time.localtime(item['caption']['created_at']))
+        print("Published on: {0}".format(pub_time))
+        print("{0} likes".format(item['like_count']))
+        print("User: {0}".format(item['user']['username']))
 
-def likePosts():
+        print("Loading likers...")
+        api.getMediaLikers(m_id)
+        indx=1
+        for eachUser in api.LastJson['users']:
+            pk=eachUser['pk']
+            user_name=eachUser['username']
+            if checkTarget(pk):
+                api.follow(pk)
+                print("{0}. ".format(indx),end='')
+                print("{0}".format(user_name))
+                indx=indx+1
+                time.sleep(random.randint(1,3))
+    except Exception as error:
+        print("FollowLikers: {0}".format(error))
+
+def likeExplore(threadName, multithread):
+    api.explore()
+    i=0
+    for eachJsonObj in api.LastJson['items']:
+        try:
+            media_id = eachJsonObj['media']['pk']
+            if not eachJsonObj['media']['has_liked']:
+                api.like(media_id)
+                i=i+1
+                time.sleep(random.randint(2, 4))
+                print(".",end = '')
+        except:
+            continue
+    print("Liking from explore process ended. {0} pictures liked".format(i))
+
+def likeFeed(threadName, multithread):
     posts = 0
     print("Liking Posts from Feed...")
     for i in range (0,5,1):
@@ -186,20 +225,89 @@ def likePosts():
                     posts = posts+1
                     time.sleep(random.randint(2,8))
         except:
-            print(".", end='')
-    print("\nLiked {0} picture(s).".format(posts))
+            print("*", end='')
+    print("\nLiked {0} picture(s) from feed.".format(posts))
+
+def commentHashtag(threadName, hashtag):
+    api.getHashtagFeed(hashtag)
+    i=0
+    try:
+        for eachJsonObject in api.LastJson['items']:
+            media_id = eachJsonObject['caption']['media_id']
+
+            if checkMedia("comment", media_id, 0, 50):
+                writestuff = comments[random.randint(0,len(comments)-1)]
+                if not eachJsonObject['has_liked']:
+                    api.like(media_id)
+                    api.comment(media_id,writestuff)
+                    i=i+1
+                time.sleep(random.randint(5, 20))
+    except:
+        print(" ",end='')
+        print("commentHashtag process is over: {0} pictures commented".format(i))
+
+
+def likeHashtag(threadName, hashtag):
+    api.getHashtagFeed(hashtag)
+    i =0
+    try:
+        for eachJsonObject in api.LastJson['items']:
+            media_id = eachJsonObject['caption']['media_id']
+
+            if checkMedia("like", media_id, 0, 1000):
+                if not eachJsonObject['has_liked']:
+                    api.like(media_id)
+                    i=i+1
+                    time.sleep(random.randint(1, 3))
+    except:
+        print(".",end='')
+    print("likeHashtag process is over: {0} pictures liked".format(i))
+
+
+def automatic(h_tag):
+    try:
+        api.getHashtagFeed(h_tag)
+        media_array = []
+        j=0
+
+        print("Loading Media...")
+
+        for eachJsonObject in api.LastJson['items']:
+            try:
+                media_id = eachJsonObject['caption']['media_id']
+                if checkMedia("like", media_id, 100, 400):
+                    this_media = [media_id, checkQuality(media_id)]
+                    media_array.append(this_media)
+                    j = j + 1
+            except TypeError:
+                print("...", end='')
+                continue
+
+        print("{0} pictures chosed".format(j))
+        maxpoint = media_array[0][1]
+        chosenID = media_array[0][0]
+        print("Media loaded, selecting the best choice...")
+        for i in range(0, j, 1):
+            if maxpoint < media_array[i][1]:
+                chosenID = media_array[i][0]
+                maxpoint = media_array[i][1]
+        followLikers(chosenID)
+    except Exception as error:
+        print("Automatic-error: {0}".format(error))
+
+
 
 
 def checkTarget(u_id):
 
     api.getUsernameInfo(u_id)
-    for i in range(0, len(followinglonglist) - 1):
+    for i in range(0, len(followinglonglist) - 1,1):
         if u_id == followinglonglist[i][0]:
             return False
     try:
         flr = api.LastJson['user']['follower_count']
         flng = api.LastJson['user']['following_count']
-        if flr > 1500 or flng > 1500:
+        if flr > 1500 or flr <70 or flng > 1500 or flng <70:
             return False
         if (flr - flng > 600):
             return False
@@ -209,25 +317,62 @@ def checkTarget(u_id):
     except:
         return False
 
+def checkMedia(threadName,m_id,minim,maxim):
+    try:
+        api.mediaInfo(m_id)
+        item = api.LastJson['items'][0]
+        post_like = int(item['like_count'])
+        post_comment = int(item['comment_count'])
+        if threadName == "like":
+            if post_like in range(minim, maxim):
+                return True
+        if threadName == "comment":
+            if post_comment in range(minim, maxim):
+                return True
+    except Exception as error:
+        print("checkMedia: {0}".format(error))
+
+    return False
+
+
 def checkTime(timevalue, minim, maxim):
     ct = time.time()
-    if(ct-timevalue > minim):
-        if(ct-timevalue<maxim):
+    if ct-timevalue in range (minim, maxim):
             return True
     return False
+
+def checkQuality(m_id):
+    api.mediaInfo(m_id)
+    try:
+        media_points = 0
+        description = api.LastJson['items'][0]['caption']['text']
+        for eachHashtag in hashtagQuality:
+            if eachHashtag in description:
+                media_points = media_points + 1
+        for eachHashtag in bannedHashtags:
+            if eachHashtag in description:
+                media_points = media_points - 1
+        return media_points
+    except:
+        print(" ", end='')
+        return 0
+
+def closeapp():
+    print("Shutting down bot...")
+    savefiles()
+    api.logout()
+    sys.exit()
 
 def start():
     helper()
     while 1:
         cmd = input('instabot> ')
         if cmd == 'exit':
-            print("Shutting down bot...")
-            savefiles()
-            api.logout()
-            sys.exit()
+            closeapp()
         if cmd == "hashtag":
             try:
-                _thread.start_new_thread(followpeoplebyhashtag, ("thread1", (input('hashtag: '))))
+                _thread.start_new_thread(followpeoplebyhashtag, ("hashtag", (input('hashtag: '))))
+                print("hashtag started on another thread, you can continue using the program")
             except Exception as error:
                 print("Error: unable to start thread\n{0}".format(error))
             print("instabot> ")
@@ -235,14 +380,46 @@ def start():
         if cmd == "hashtaglist":
             followhashtaglist()
             continue
-        if cmd == 'randomlike':
-            likePosts()
+        if cmd == 'feedlike':
+            try:
+                _thread.start_new_thread(likeFeed, ("feedlike", "thread1"))
+                print("feedlike started on another thread, you can continue using the program")
+            except Exception as error:
+                print("Error: unable to start thread\n{0}".format(error))
+            print("instabot> ")
+            continue
+        if cmd == 'explorelike':
+            try:
+                _thread.start_new_thread(likeExplore, ("explorelike", "thread1"))
+                print("explorelike started on another thread, you can continue using the program")
+            except Exception as error:
+                print("Error: unable to start thread\n{0}".format(error))
+            print("instabot> ")
+            continue
+        if cmd == 'likehashtag':
+            try:
+                _thread.start_new_thread(likeHashtag, ("thread1", (input('hashtag: '))))
+                print("likehashtag started on another thread, you can continue using the program")
+            except Exception as error:
+                print("Error: unable to start thread\n{0}".format(error))
+            print("instabot> ")
+            continue
+        if cmd == 'commenttag':
+            try:
+                _thread.start_new_thread(commentHashtag, ("comment", (input('hashtag: '))))
+                print("commenttag started on another thread, you can continue using the program")
+            except Exception as error:
+                print("Error: unable to start thread\n{0}".format(error))
+            print("instabot> ")
             continue
         if cmd == 'refresh':
             updatelists()
             continue
         if cmd == 'stats':
             showstats()
+            continue
+        if cmd == 'automatic':
+            automatic(input('hashtag: '))
             continue
         if cmd == 'unfollow':
             deleteunfollowers()
@@ -263,10 +440,16 @@ def helper():
     print("-------------------------------------------------")
     print("refresh\t\t-\t Refresh lists")
     print("stats\t\t-\t Show stats")
+    print("unfollow\t-\t Unfollow all unfollowers")
+    print("-------------------------------------------------")
     print("hashtag\t\t-\t Follow people based on a hashtag")
     print("hashtaglist\t-\t Follow people based on a hashtag list")
-    print("randomlike\t-\t Like posts from people you follow")
-    print("unfollow\t-\t Unfollow all unfollowers")
+    print("feedlike\t-\t Like posts from people you follow")
+    print("explorelike\t-\t Like posts from explore page")
+    print("likehashtag\t-\t Like posts from a hashtag")
+    print("commenttag\t-\t Comment posts from a hashtag")
+    print("automatic\t-\t Automatically follows all likers of a picture chosen by a smart algorithm")
+    print("-------------------------------------------------")
     print("changeuser\t-\t Change the user")
     print("exit\t\t-\t Shut down the bot")
     print("help\t\t-\t Show this menu on the screen")
@@ -276,6 +459,28 @@ def helper():
 
 
 #### MAIN
+
+comments = [
+    "Awesome feed, keep it up! I would love it if you visited my page too. ðŸ¤©",
+    "Great job! ðŸ‘ðŸ‘",
+    "Awesomeeee ðŸ‘ŒðŸ‘Œ",
+    "Beautiful ðŸ¤©",
+    "Nice pictures, it would be awesome if you could check out my page. ",
+    "Like my comment, for no reason, be sure to check my feed too ðŸ˜‚ðŸ˜‚ðŸ˜… ",
+]
+
+hashtagQuality = [
+    "photography", "art", "landscape",
+    "photooftheday", "canon", "nikon",
+    "olympus", "camera", "travel",
+    "instagood", "sea", "sunset",
+    "picoftheday", "nature", "composition"
+]
+
+bannedHashtags = [
+    "likeforfollow", "followforfollow", "like4follow", "follow4follow"
+    "likeforlike", "like4like", "followers", "lfl", "fff", "lff", "ffl"
+]
 
 ### SET LISTS
 
