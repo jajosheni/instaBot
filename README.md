@@ -23,6 +23,7 @@ Added a couple of features like:
   1. Explore pictures autolike
   2. Hashtag pictures autolike
   3. Hashtag pcitures autocomment
-  4. AUTOMATIC - you are prompted for a hashtag then the app smartly selects a picture and follows its likers
+  4. AUTOMATIC:
+      you are prompted for a hashtag then the app smartly selects a picture and follows its likers.
 
 
