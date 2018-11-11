@@ -19,6 +19,7 @@
 #### Use at your own risk
 
 2.0 version upgrades:
+Made most of the features run on other threads.
 Added a couple of features like:
   1. Explore pictures autolike
   2. Hashtag pictures autolike
@@ -27,3 +28,18 @@ Added a couple of features like:
       you are prompted for a hashtag then the app smartly selects a picture and follows its likers.
 
 
+1.1 version upgrades:
+Added a couple of features like:
+  1. Hashtag based auto-following
+  2. Hashtaglist based auto-following
+  3. Feed auto-like
+  
+1.0 version:
+  This program was firstly made to unfollow your unfollowers.
+  First functions were:
+  1. Refresh - to refresh lists
+  2. Stats - to see your followers,followings and Unfollowers
+  3. Unfollow - to unfollow the accounts not following back
+  4. Changeuser - to switch between accounts without having to close the app
+  5. Help - to bring up the menu.
+  6. Exit.
