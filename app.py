@@ -193,7 +193,7 @@ def followLikers(m_id):
                 print("{0}. ".format(indx),end='')
                 print("{0}".format(user_name))
                 indx=indx+1
-                time.sleep(random.randint(1,3))
+                time.sleep(random.randint(5,10))
     except Exception as error:
         print("FollowLikers: {0}".format(error))
 
@@ -241,7 +241,7 @@ def commentHashtag(threadName, hashtag):
                     api.like(media_id)
                     api.comment(media_id,writestuff)
                     i=i+1
-                time.sleep(random.randint(5, 20))
+                time.sleep(random.randint(10, 30))
     except:
         print(" ",end='')
         print("commentHashtag process is over: {0} pictures commented".format(i))
@@ -258,7 +258,7 @@ def likeHashtag(threadName, hashtag):
                 if not eachJsonObject['has_liked']:
                     api.like(media_id)
                     i=i+1
-                    time.sleep(random.randint(1, 3))
+                    time.sleep(random.randint(3, 6))
     except:
         print(".",end='')
     print("likeHashtag process is over: {0} pictures liked".format(i))
@@ -275,7 +275,7 @@ def automatic(h_tag):
         for eachJsonObject in api.LastJson['items']:
             try:
                 media_id = eachJsonObject['caption']['media_id']
-                if checkMedia("like", media_id, 100, 400):
+                if checkMedia("like", media_id, 200, 1000):
                     this_media = [media_id, checkQuality(media_id)]
                     media_array.append(this_media)
                     j = j + 1
@@ -283,7 +283,7 @@ def automatic(h_tag):
                 print("...", end='')
                 continue
 
-        print("{0} pictures chosed".format(j))
+        print("{0} pictures choosed".format(j))
         maxpoint = media_array[0][1]
         chosenID = media_array[0][0]
         print("Media loaded, selecting the best choice...")
@@ -291,6 +291,7 @@ def automatic(h_tag):
             if maxpoint < media_array[i][1]:
                 chosenID = media_array[i][0]
                 maxpoint = media_array[i][1]
+        print("Chosen Media: {0} points".format(maxpoint))
         followLikers(chosenID)
     except Exception as error:
         print("Automatic-error: {0}".format(error))
@@ -461,12 +462,12 @@ def helper():
 #### MAIN
 
 comments = [
-    "Awesome feed, keep it up! I would love it if you visited my page too.",
-    "Great job!",
-    "Awesomeeee",
-    "Beautiful ",
-    "Nice pictures, it would be awesome if you could check out my page. ",
-    "Like my comment, for no reason, be sure to check my feed too ",
+    "Awesome feed, keep it up! I would love it if you visited my page too. 🤩",
+    "Great job! 👏👏",
+    "Awesomeeee 👌👌",
+    "Beautiful 😍😍",
+    "Nice pictures, it would be awesome if you could check out my page. 😁😎🤗",
+    "Like my comment, for no reason, be sure to check my feed too 😂😂😅 "
 ]
 
 hashtagQuality = [
@@ -479,7 +480,8 @@ hashtagQuality = [
 
 bannedHashtags = [
     "likeforfollow", "followforfollow", "like4follow", "follow4follow"
-    "likeforlike", "like4like", "followers", "lfl", "fff", "lff", "ffl"
+    "likeforlike", "like4like", "followers", "lfl", "fff", "lff", "ffl",
+    "followme", "follow", "autofollow", "autolike", "peach", "sexy", "hot"
 ]
 
 ### SET LISTS
