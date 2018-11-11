@@ -461,12 +461,12 @@ def helper():
 #### MAIN
 
 comments = [
-    "Awesome feed, keep it up! I would love it if you visited my page too. ðŸ¤©",
-    "Great job! ðŸ‘ðŸ‘",
-    "Awesomeeee ðŸ‘ŒðŸ‘Œ",
-    "Beautiful ðŸ¤©",
+    "Awesome feed, keep it up! I would love it if you visited my page too.",
+    "Great job!",
+    "Awesomeeee",
+    "Beautiful ",
     "Nice pictures, it would be awesome if you could check out my page. ",
-    "Like my comment, for no reason, be sure to check my feed too ðŸ˜‚ðŸ˜‚ðŸ˜… ",
+    "Like my comment, for no reason, be sure to check my feed too ",
 ]
 
 hashtagQuality = [
