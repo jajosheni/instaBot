@@ -30,7 +30,7 @@ Made most of the features run on other threads.
 Added a couple of features like:
   1. Explore pictures autolike
   2. Hashtag pictures autolike
-  3. Hashtag pcitures autocomment
+  3. Hashtag pictures autocomment
   4. AUTOMATIC:
       you are prompted for a hashtag then the app smartly selects a picture and follows its likers.
 
