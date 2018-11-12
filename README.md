@@ -15,8 +15,8 @@
 | 4. Run the app.py script  | `python app.py` |
 | NOTE | _if you are using **pycharm**:  replace getpass.getpass() method with input()_ |
 
-**=====================**
 #### Use at your own risk
+**=====================**
 
 #### 2.1 version upgrades:
   1. Made 'automatic' run on a separate thread
