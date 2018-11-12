@@ -18,6 +18,12 @@
 **=====================**
 #### Use at your own risk
 
+#### 2.1 version upgrades:
+  1. Made 'automatic' run on a separate thread
+  2. Added features like autolike & autocomment to automatic
+  3. Improved hashtags and comments list
+
+
 #### 2.0 version upgrades:
 
 Made most of the features run on other threads.
