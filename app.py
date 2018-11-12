@@ -8,7 +8,7 @@ import time
 import random
 import _thread
 import getpass
-
+import os
 
 def login():
     username = input('instabot> Username: ')
@@ -172,6 +172,29 @@ def followpeoplebyhashtag(threadName, hashtag):
         print(" ")
     print("Followed {0} accounts...".format(total))
 
+
+def likeUserFeed(threadname, u_id):
+    try:
+        api.getUserFeed(u_id)
+        feed = api.LastJson['items']
+        howmanyposts = api.LastJson['num_results']
+        if howmanyposts > 0:
+            for i in range(0, howmanyposts, 1):
+                if i == 3:
+                    return
+                media_id = feed[i]['pk']
+                if not feed[i]['has_liked']:
+                    api.like(media_id)
+                    if i == 0:
+                        addComment(media_id)
+                    time.sleep(random.randint(1,3))
+    except:
+        print(" ", end='')
+
+def addComment(m_id):
+    writestuff = comments[random.randint(0, len(comments) - 1)]
+    api.comment(m_id, writestuff)
+
 def followLikers(m_id):
     try:
         print("Media Info:")
@@ -190,6 +213,7 @@ def followLikers(m_id):
             user_name=eachUser['username']
             if checkTarget(pk):
                 api.follow(pk)
+                _thread.start_new_thread(likeUserFeed, ("likeuserfeed",pk))
                 print("{0}. ".format(indx),end='')
                 print("{0}".format(user_name))
                 indx=indx+1
@@ -236,10 +260,9 @@ def commentHashtag(threadName, hashtag):
             media_id = eachJsonObject['caption']['media_id']
 
             if checkMedia("comment", media_id, 0, 50):
-                writestuff = comments[random.randint(0,len(comments)-1)]
                 if not eachJsonObject['has_liked']:
                     api.like(media_id)
-                    api.comment(media_id,writestuff)
+                    addComment(media_id)
                     i=i+1
                 time.sleep(random.randint(10, 30))
     except:
@@ -264,7 +287,7 @@ def likeHashtag(threadName, hashtag):
     print("likeHashtag process is over: {0} pictures liked".format(i))
 
 
-def automatic(h_tag):
+def automatic(threadname,h_tag):
     try:
         api.getHashtagFeed(h_tag)
         media_array = []
@@ -293,6 +316,7 @@ def automatic(h_tag):
                 maxpoint = media_array[i][1]
         print("Chosen Media: {0} points".format(maxpoint))
         followLikers(chosenID)
+        print("Automatic: done\ninstabot> ")
     except Exception as error:
         print("Automatic-error: {0}".format(error))
 
@@ -330,8 +354,8 @@ def checkMedia(threadName,m_id,minim,maxim):
         if threadName == "comment":
             if post_comment in range(minim, maxim):
                 return True
-    except Exception as error:
-        print("checkMedia: {0}".format(error))
+    except:
+        print(" ")
 
     return False
 
@@ -420,13 +444,16 @@ def start():
             showstats()
             continue
         if cmd == 'automatic':
-            automatic(input('hashtag: '))
+            _thread.start_new_thread(automatic, ("automatic", (input('hashtag: '))))
             continue
         if cmd == 'unfollow':
             deleteunfollowers()
             continue
         if cmd == 'help':
             helper()
+            continue
+        if cmd == 'sys':
+            os.system(input('Console: '))
             continue
         if cmd == 'changeuser':
             api.logout()
@@ -467,7 +494,11 @@ comments = [
     "Awesomeeee 👌👌",
     "Beautiful 😍😍",
     "Nice pictures, it would be awesome if you could check out my page. 😁😎🤗",
-    "Like my comment, for no reason, be sure to check my feed too 😂😂😅 "
+    "Like my comment, for no reason, be sure to check my feed too 😂😂😅 ",
+    "Superb!",
+    "Sooo nice 👌",
+    "👏 marvelous",
+    "This is beautiful, checkout my gallery too, i have some nice shots 📷📸✔"
 ]
 
 hashtagQuality = [
@@ -475,13 +506,16 @@ hashtagQuality = [
     "photooftheday", "canon", "nikon",
     "olympus", "camera", "travel",
     "instagood", "sea", "sunset",
-    "picoftheday", "nature", "composition"
+    "picoftheday", "nature", "composition",
+    "autumn", "travelgram", "traveltheworld"
 ]
 
 bannedHashtags = [
     "likeforfollow", "followforfollow", "like4follow", "follow4follow"
     "likeforlike", "like4like", "followers", "lfl", "fff", "lff", "ffl",
-    "followme", "follow", "autofollow", "autolike", "peach", "sexy", "hot"
+    "followme", "follow", "autofollow", "autolike", "peach", "sexy", "hot",
+    "sexymom", "ass", "tattoedgirl", "nude", "boobs", "boobies", "model",
+    "blonde", "victoriasecret", "lingerie", "legs", "bootie", "booty"
 ]
 
 ### SET LISTS
@@ -498,3 +532,4 @@ followinglonglist = []
 login()
 updatelists()
 start()
+
