@@ -2,8 +2,8 @@ from setuptools import setup
 
 setup(
     name='instaBot',
-    version='2.0',
-    description='Unofficial instagram bot: stats, unfollowers, autolike, autofollow, autofeedliker, developing on python',
+    version='2.1.1',
+    description='Unofficial instabot, developed on python, learn more about the features inside the readme file',
     url='https://github.com/jajosheni/instaBot',
     author='Sheni Hamitaj',
     author_email='shen.i@live.com',
