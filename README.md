@@ -19,7 +19,8 @@
 **=====================**
 
 #### 2.1.1 version upgrades:
-Created spamcomment.py and the purpose is simple:
+Created _spamcomment.py_
+Its use & purpose are simple:
   1. Enter hashtag to browse
   2. Enter the word you want to comment
     (ex: #myhashtag)
