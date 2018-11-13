@@ -18,6 +18,16 @@
 #### Use at your own risk
 **=====================**
 
+#### 2.1.1 version upgrades:
+Created spamcomment.py and the purpose is simple:
+  1. Enter hashtag to browse
+  2. Enter the word you want to comment
+    (ex: #myhashtag)
+  3. The script will go to some of the pictures under the hashtag entered
+      and comment your #myhashtag;
+  4. I've created this so you get some traffic through your unique hashtag
+  5. It's better if you use this with a fake account, so you don't surpass the comment limit.
+
 #### 2.1 version upgrades:
   1. Made 'automatic' run on a separate thread
   2. Added features like autolike & autocomment to automatic
