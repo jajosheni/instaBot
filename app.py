@@ -1,6 +1,6 @@
 ### only for personal use
 ### AUTHOR: github.com/jajosheni
-### Instagram BOT
+### instaBot v2.1.1
 
 import sys
 from InstagramAPI import InstagramAPI
