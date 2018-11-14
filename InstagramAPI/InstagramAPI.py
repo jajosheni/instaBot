@@ -108,8 +108,11 @@ class InstagramAPI:
     def autoCompleteUserList(self):
         return self.SendRequest('friendships/autocomplete_user_list/')
 
-    def timelineFeed(self):
-        return self.SendRequest('feed/timeline/')
+    def timelineFeed(self, maxid=' '):
+        if maxid == ' ':
+            return self.SendRequest('feed/timeline/')
+        else:
+            return self.SendRequest('feed/timeline/'+ '?rank_token=' + self.rank_token + '&max_id=' + str(maxid))
 
     def megaphoneLog(self):
         return self.SendRequest('megaphone/log/')
