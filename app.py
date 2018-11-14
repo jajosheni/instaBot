@@ -238,16 +238,20 @@ def likeExplore(threadName, multithread):
 
 def likeFeed(threadName, multithread):
     posts = 0
+    nextmax = ' '
     print("Liking Posts from Feed...")
-    for i in range (0,5,1):
-        api.timelineFeed()
+    while posts < 100:
+
+        api.timelineFeed(nextmax)
+        nextmax = api.LastJson['next_max_id']
+
         try:
             for eachJsonObject in api.LastJson['items']:
                 postID = eachJsonObject['caption']['media_id']
                 if not eachJsonObject['has_liked']:
                     api.like(postID)
                     posts = posts+1
-                    time.sleep(random.randint(2,8))
+                    time.sleep(random.randint(2,6))
         except:
             print("*", end='')
     print("\nLiked {0} picture(s) from feed.".format(posts))
