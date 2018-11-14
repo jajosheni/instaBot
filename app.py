@@ -171,7 +171,7 @@ def followpeoplebyhashtag(threadName, hashtag):
     except:
         print(" ")
     print("Followed {0} accounts...".format(total))
-
+    _thread.exit()
 
 def likeUserFeed(threadname, u_id):
     try:
@@ -190,6 +190,7 @@ def likeUserFeed(threadname, u_id):
                     time.sleep(random.randint(1,3))
     except:
         print(" ", end='')
+    _thread.exit()
 
 def addComment(m_id):
     writestuff = comments[random.randint(0, len(comments) - 1)]
@@ -235,6 +236,7 @@ def likeExplore(threadName, multithread):
         except:
             continue
     print("Liking from explore process ended. {0} pictures liked".format(i))
+    _thread.exit()
 
 def likeFeed(threadName, multithread):
     posts = 0
@@ -255,6 +257,7 @@ def likeFeed(threadName, multithread):
         except:
             print("*", end='')
     print("\nLiked {0} picture(s) from feed.".format(posts))
+    _thread.exit()
 
 def commentHashtag(threadName, hashtag):
     api.getHashtagFeed(hashtag)
@@ -271,7 +274,8 @@ def commentHashtag(threadName, hashtag):
                 time.sleep(random.randint(10, 30))
     except:
         print(" ",end='')
-        print("commentHashtag process is over: {0} pictures commented".format(i))
+    print("commentHashtag process is over: {0} pictures commented".format(i))
+    _thread.exit()
 
 
 def likeHashtag(threadName, hashtag):
@@ -289,6 +293,7 @@ def likeHashtag(threadName, hashtag):
     except:
         print(".",end='')
     print("likeHashtag process is over: {0} pictures liked".format(i))
+    _thread.exit()
 
 
 def automatic(threadname,h_tag):
@@ -323,7 +328,7 @@ def automatic(threadname,h_tag):
         print("Automatic: done\ninstabot> ")
     except Exception as error:
         print("Automatic-error: {0}".format(error))
-
+    _thread.exit()
 
 
 
