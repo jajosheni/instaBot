@@ -52,7 +52,7 @@
 
 Run: `python spamcomment.py`
 
-SpammComment use & purpose is simple:
+SpamComment use & purpose is simple:
   1. Enter hashtag to browse
   2. Enter the word you want to comment
     (ex: #myhashtag)
