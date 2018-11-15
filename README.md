@@ -1,6 +1,6 @@
 
 # instaBot
-<a href="https://jajosheni.github.io/instaBot/" title="python InstaBot"><img src="https://img.shields.io/badge/python-instaBot-green.svg"></a>
+<a href="https://github.com/jajosheni/instaBot/" title="python InstaBot"><img src="https://img.shields.io/badge/python-instaBot-green.svg"></a>
 <a href="https://instagram.com/detajist" title="instapage"><img src="https://img.shields.io/badge/follow-instagram-orange.svg"></a>
 <a href="https://www.python.org/downloads/release/python-350/" title="use python3.5"><img src="https://img.shields.io/badge/version-python3.5-brightgreen.svg"></a>
 
