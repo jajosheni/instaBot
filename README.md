@@ -7,13 +7,43 @@
 <img src="https://instavast.com/wp-content/uploads/2017/09/auto-activity.png">
 
 ### Installation Instructions
-| Step | Command |
-|---|---|
-| 1. Fork/Clone/Download this repo |  `git clone https://github.com/jajosheni/instaBot` |
-| 2. Navigate to the directory | `cd instaBot` |
-| 3. Install the dependencies | `python setup.py install ` or  `pip install -r requirements.txt` |
-| 4. Run the app.py script  | `python app.py` |
-| NOTE | _if you are using **pycharm**:  replace getpass.getpass() method with input()_ |
+<table class="tableblock frame-all grid-all spread data-line-12">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Step</th>
+<th class="tableblock halign-left valign-top">Command</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOTE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>if you are using <strong>pycharm</strong>:  replace getpass.getpass() method with input()</em></p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1. Fork/Clone/Download this repo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>git clone <a href="https://github.com/jajosheni/instaBot" class="bare">https://github.com/jajosheni/instaBot</a></code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2. Navigate to the directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cd instaBot</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3. Install the dependencies</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>python setup.py install ` or  `pip install -r requirements.txt</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4. Run the app.py script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>python app.py</code></p></td>
+</tr>
+</tbody>
+</table>
+
 
 #### Use at your own risk
 **=====================**
