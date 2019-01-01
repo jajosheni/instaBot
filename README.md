@@ -55,6 +55,7 @@
 #### 2.1.2 version upgrades:
   1. Fixed feedlike & explore like so more than 100 pictures will be auto-liked.
   2. Removed Hashtaglist based auto-following as unnecessary.
+  3. Added `profpic` to Spam Comment so you can download anyone's full size profile picture.
 
 #### 2.1.1 version upgrades:
 
