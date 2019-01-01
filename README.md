@@ -38,7 +38,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3. Install the dependencies</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>python setup.py install ` or  `pip install -r requirements.txt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>python setup.py install or pip install -r requirements.txt</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">4. Run the app.py script</p></td>
