@@ -59,10 +59,10 @@ SpamComment use & purpose is simple:
   1. Enter hashtag to browse
   2. Enter the word you want to comment
     (ex: #myhashtag)
-  3. Removed Hashtaglist based auto-following as unnecessary.
 <br><i>The script will go to some of the pictures under the hashtag entered and comment your #myhashtag;<br>
 I've created this so you get some traffic through your unique hashtag.
 It's better if you use this with a fake account, so you don't surpass the comment limit on your original account.</i>
+  3. Removed Hashtaglist based auto-following as unnecessary.
 
 #### 2.1 version upgrades:
   1. Made 'automatic' run on a separate thread
