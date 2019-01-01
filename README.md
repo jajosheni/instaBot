@@ -51,6 +51,11 @@
 #### Use at your own risk
 **=====================**
 
+
+#### 2.1.2 version upgrades:
+  1. Fixed feedlike & explore like so more than 100 pictures will be auto-liked.
+  2. Removed Hashtaglist based auto-following as unnecessary.
+
 #### 2.1.1 version upgrades:
 
 Run: `python spamcomment.py`
@@ -62,7 +67,7 @@ SpamComment use & purpose is simple:
 <br><i>The script will go to some of the pictures under the hashtag entered and comment your #myhashtag;<br>
 I've created this so you get some traffic through your unique hashtag.
 It's better if you use this with a fake account, so you don't surpass the comment limit on your original account.</i>
-  3. Removed Hashtaglist based auto-following as unnecessary.
+
 
 #### 2.1 version upgrades:
   1. Made 'automatic' run on a separate thread
