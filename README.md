@@ -62,7 +62,7 @@ SpamComment use & purpose is simple:
   3. Removed Hashtaglist based auto-following as unnecessary.
 <br><i>The script will go to some of the pictures under the hashtag entered and comment your #myhashtag;<br>
 I've created this so you get some traffic through your unique hashtag.
-It's better if you use this with a fake account, so you don't surpass the comment limit on your original account.<i>
+It's better if you use this with a fake account, so you don't surpass the comment limit on your original account.</i>
 
 #### 2.1 version upgrades:
   1. Made 'automatic' run on a separate thread
