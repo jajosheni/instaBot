@@ -3,7 +3,8 @@
 
 @import "{{ site.theme }}";
 
-.btn{
-  width: 0px;
-  height: 0px;
+.btn {
+    background: transparent;
+    border: none !important;
+    font-size:0;
 }
