@@ -1,5 +1,5 @@
 ### only for personal use
-### AUTHOR: github.com/jajosheni
+### AUTHOR: jajosheni.github.io
 ### Instagram BOT
 
 import sys
