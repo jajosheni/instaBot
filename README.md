@@ -1,5 +1,6 @@
 
 # instaBot
+#### UPDATE: LIMITED USE DUE TO INSTAGRAM API DEPRECATION
 
 <a href="https://github.com/jajosheni/instaBot/" title="python InstaBot"><img src="https://img.shields.io/badge/python-instaBot-green.svg"></a>
 <a href="https://instagram.com/detajist" title="instapage"><img src="https://img.shields.io/badge/follow-instagram-orange.svg"></a>
