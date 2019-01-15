@@ -113,14 +113,17 @@ def peoplefollowingme():
 
             try:
                 next_max_id = temp["next_max_id"]
-            except:
-                print("Followers scanned.")
+                if 'none' in str(next_max_id).lower():
+                    print("Followers scanned.")
 
-                for follow in followers:
-                    followersID.append(follow["pk"])
-                    this_p = [follow["pk"], follow["username"]]
-                    followerslonglist.append(this_p)
-                return
+                    for follow in followers:
+                        followersID.append(follow["pk"])
+                        this_p = [follow["pk"], follow["username"]]
+                        followerslonglist.append(this_p)
+                    return
+            except:
+                print("Couldn't get next_max_id.")
+
     except Exception as e:
         print("couldn't refresh, please try later.")
 
@@ -138,14 +141,16 @@ def peopleifollow():
 
         try:
             next_max_id = temp["next_max_id"]
-        except:
-            print("Followings scanned.")
+            if 'none' in str(next_max_id).lower():
+                print("Followings scanned.")
 
-            for follow in following:
-                followingID.append(follow["pk"])
-                this_p = [follow["pk"], follow["username"]]
-                followinglonglist.append(this_p)
-            return
+                for follow in following:
+                    followingID.append(follow["pk"])
+                    this_p = [follow["pk"], follow["username"]]
+                    followinglonglist.append(this_p)
+                return
+        except:
+            print("Couldn't get next_max_id.")
 
 
 def peoplenotfollowingme(fo_ing, fo_ers):
