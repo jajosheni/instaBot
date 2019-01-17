@@ -46,6 +46,13 @@
 #### Use at your own risk
 **=====================**
 
+#### 2.2.1 version upgrades:
+InstagramAPI URLs are changing so mediainfo was returning error 405.
+  1. Removed mediainfo method.
+  2. Fixed bugs related to it.
+  3. More efficient `automatic` method.
+  4. Replace PUT_YOUR_USERNAME_HERE with your username in order to keep track of your followings.
+
 #### 2.2 version upgrades:
   1. Added a new list of 'Albanian' comments and a location check function
      so pics with a location in Albania will get an Albanian comment.
