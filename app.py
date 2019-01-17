@@ -294,7 +294,6 @@ def automatic(threadname,h_tag):
         api.getHashtagFeed(h_tag)
         media_array = []
         j = 0
-        global selectedindex
         selectedindex = 0
 
         print("Loading Media...")
