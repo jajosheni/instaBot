@@ -1,5 +1,5 @@
 ### only for personal use
-### AUTHOR: jajosheni.github.io
+### AUTHOR: github.com/jajosheni
 ### Instagram BOT
 
 import sys
@@ -7,8 +7,10 @@ from InstagramAPI import InstagramAPI
 import time
 import random
 import _thread
-import getpass
 import os
+
+global YOUR_USERNAME
+YOUR_USERNAME = "PUT_YOUR_USERNAME_HERE"
 
 def printart():
     art =[
@@ -45,15 +47,15 @@ def checkfiles():
         if not os.path.exists("whitelist.txt"):
             file = open("whitelist.txt", "w")
             file.close()
-    except:
-        pass
+    except Exception as error:
+        print(str(error))
 
 
 def login():
     username = input('instabot> Username: ')
-    password = getpass.getpass('instabot> Password: ')
+    password = input('instabot> Password: ')
 
-    if username=='YOUR_USERNAME' :
+    if username == YOUR_USERNAME:
         loadfollowfile()
 
     print("Connecting...")
@@ -83,7 +85,7 @@ def loadfollowfile():
 
 
 def savefiles():
-    if api.username=='YOUR_USERNAME':
+    if api.username == YOUR_USERNAME:
         try:
             followingfile = open("followings.txt", "r")
             text = []
@@ -224,27 +226,20 @@ def deleteList():
 
 def followLikers(m_id):
     try:
-        print("Media Info:")
-        api.mediaInfo(m_id)
-        item = api.LastJson['items'][0]
-        pub_time = time.strftime('%d-%m-%Y %H:%M:%S', time.localtime(item['caption']['created_at']))
-        print("Published on: {0}".format(pub_time))
-        print("{0} likes".format(item['like_count']))
-        print("User: {0}".format(item['user']['username']))
-
         print("Loading likers...")
         api.getMediaLikers(m_id)
-        indx=1
+        print("{} Likers".format(api.LastJson['user_count']))
+        indx = 1
         for eachUser in api.LastJson['users']:
-            pk=eachUser['pk']
-            user_name=eachUser['username']
+            pk = eachUser['pk']
+            user_name = eachUser['username']
             if checkTarget(pk):
                 api.follow(pk)
                 _thread.start_new_thread(likeUserFeed, ("likeuserfeed",pk))
                 print("{0}. ".format(indx),end='')
                 print("{0}".format(user_name))
                 indx=indx+1
-                time.sleep(random.randint(5,10))
+                time.sleep(random.randint(5,15))
         print("{} people followed.".format(indx))
     except Exception as error:
         print("FollowLikers: {0}".format(error))
@@ -298,31 +293,37 @@ def automatic(threadname,h_tag):
     try:
         api.getHashtagFeed(h_tag)
         media_array = []
-        j=0
+        j = 0
+        global selectedindex
+        selectedindex = 0
 
         print("Loading Media...")
 
         for eachJsonObject in api.LastJson['items']:
             try:
-                media_id = eachJsonObject['caption']['media_id']
-                if checkMedia("like", media_id, 200, 1000):
-                    this_media = [media_id, checkQuality(media_id)]
+                media_id = str(eachJsonObject['caption']['media_id'])
+                pub_time = int(eachJsonObject['taken_at'])
+                owner = str(eachJsonObject['caption']['user']['username'])
+                if checkMedia("like", eachJsonObject, 200, 1000):
+                    this_media = [media_id, checkQuality(eachJsonObject), pub_time, owner]
                     media_array.append(this_media)
                     j = j + 1
             except TypeError:
                 print("...\t\t", end='\r')
                 continue
 
-        print("{0} pictures choosed".format(j))
+        print("{} pictures choosed".format(j))
         maxpoint = media_array[0][1]
-        chosenID = media_array[0][0]
         print("Media loaded, selecting the best choice...")
         for i in range(0, j, 1):
             if maxpoint < media_array[i][1]:
-                chosenID = media_array[i][0]
                 maxpoint = media_array[i][1]
-        print("Chosen Media: {0} points".format(maxpoint))
-        followLikers(chosenID)
+                selectedindex = i
+
+        print("Chosen Media: {0} points".format(media_array[selectedindex][1]))
+        print("Published on: {0}".format(time.strftime('%d-%m-%Y %H:%M:%S', time.localtime(int(media_array[selectedindex][2])))))
+        print("By: {}".format(media_array[selectedindex][3]))
+        followLikers(media_array[selectedindex][0])
         print("Automatic: done\ninstabot> ")
     except Exception as error:
         print("Automatic-error: {0}".format(error))
@@ -401,7 +402,7 @@ def likeHashtag(threadName, hashtag):
         for eachJsonObject in api.LastJson['items']:
             media_id = eachJsonObject['caption']['media_id']
 
-            if checkMedia("like", media_id, 0, 1000):
+            if checkMedia("like", eachJsonObject, 0, 1000):
                 if not eachJsonObject['has_liked']:
                     api.like(media_id)
                     i=i+1
@@ -419,7 +420,7 @@ def commentHashtag(threadName, hashtag):
         for eachJsonObject in api.LastJson['items']:
             media_id = eachJsonObject['caption']['media_id']
 
-            if checkMedia("comment", media_id, 0, 50):
+            if checkMedia("comment", eachJsonObject, 0, 50):
                 if not eachJsonObject['has_liked']:
                     api.like(media_id)
                     addComment(media_id)
@@ -431,14 +432,14 @@ def commentHashtag(threadName, hashtag):
     _thread.exit()
 
 
-def addComment(m_id):
+def addComment(jsonObject):
+    m_id = jsonObject['pk']
     writestuff = comments[random.randint(0, len(comments) - 1)]
 
     try:
-        api.mediaInfo(m_id)
         #albania coordinates
-        lat = float(api.LastJson['items'][0]['location']['lat'])
-        lng = float(api.LastJson['items'][0]['location']['lng'])
+        lat = float(jsonObject['location']['lat'])
+        lng = float(jsonObject['location']['lng'])
 
         if float(19.9) < lng < float(20.8):
             if float(39.6) < lat < float(42.6):
@@ -495,12 +496,10 @@ def checkWhitelist(u_id):
         return True
 
 
-def checkMedia(threadName,m_id,minim,maxim):
+def checkMedia(threadName, jsonObject, minim, maxim):
     try:
-        api.mediaInfo(m_id)
-        item = api.LastJson['items'][0]
-        post_like = int(item['like_count'])
-        post_comment = int(item['comment_count'])
+        post_like = int(jsonObject['like_count'])
+        post_comment = int(jsonObject['comment_count'])
         if threadName == "like":
             if post_like in range(minim, maxim):
                 return True
@@ -508,7 +507,7 @@ def checkMedia(threadName,m_id,minim,maxim):
             if post_comment in range(minim, maxim):
                 return True
     except:
-        print(" ")
+        pass
 
     return False
 
@@ -520,18 +519,17 @@ def checkTime(timevalue, minim, maxim):
     return False
 
 
-def checkQuality(m_id):
-    api.mediaInfo(m_id)
+def checkQuality(jsonObject):
     try:
         media_points = 0
-        description = api.LastJson['items'][0]['caption']['text']
+        description = str(jsonObject['caption']['text'])
         for eachHashtag in hashtagQuality:
             if eachHashtag in description:
                 media_points = media_points + 1
         for eachHashtag in bannedHashtags:
             if eachHashtag in description:
                 media_points = media_points - 2
-        return media_points
+        return int(media_points)
     except:
         return 0
 
