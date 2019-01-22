@@ -345,7 +345,7 @@ def likeUserFeed(threadname, u_id):
                     if not feed[i]['has_liked']:
                         api.like(media_id)
                         if i == 0:
-                            addComment(media_id)
+                            addComment(media_id, feed[i])
                         time.sleep(random.randint(1,3))
     except:
         print("...", end='\r')
@@ -422,7 +422,7 @@ def commentHashtag(threadName, hashtag):
             if checkMedia("comment", eachJsonObject, 0, 50):
                 if not eachJsonObject['has_liked']:
                     api.like(media_id)
-                    addComment(media_id)
+                    addComment(media_id, eachJsonObject)
                     i=i+1
                 time.sleep(random.randint(10, 20))
     except:
@@ -431,8 +431,8 @@ def commentHashtag(threadName, hashtag):
     _thread.exit()
 
 
-def addComment(jsonObject):
-    m_id = jsonObject['pk']
+def addComment(m_id, jsonObject):
+
     writestuff = comments[random.randint(0, len(comments) - 1)]
 
     try:
