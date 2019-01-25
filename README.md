@@ -46,6 +46,10 @@
 #### Use at your own risk
 **=====================**
 
+#### 2.2.2 version upgrades:
+  1. Added progress bar.
+  2. Cleaner Output
+  
 #### 2.2.1 version upgrades:
 InstagramAPI URLs are changing so mediainfo was returning error 405.
   1. Removed mediainfo method.
