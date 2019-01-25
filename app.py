@@ -12,7 +12,7 @@ import _thread
 import getpass
 import os
 
-YOUR_USERNAME = 'detajist'
+YOUR_USERNAME = 'PUT_YOUR_USERNAME_HERE'
 
 
 def printart():
