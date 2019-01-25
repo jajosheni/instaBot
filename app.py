@@ -1,26 +1,29 @@
-### only for personal use
-### AUTHOR: github.com/jajosheni
-### Instagram BOT
+"""
+###    only for personal use
+###    AUTHOR: github.com/jajosheni
+###    Instagram BOT
+"""
 
 import sys
 from InstagramAPI import InstagramAPI
 import time
 import random
 import _thread
+import getpass
 import os
 
-global YOUR_USERNAME
-YOUR_USERNAME = "PUT_YOUR_USERNAME_HERE"
+YOUR_USERNAME = 'detajist'
+
 
 def printart():
-    art =[
+    art = [
         " .              +   .                .   . .     .  .",
         "                   .                    .       .     *",
         "  .       *                        . . . .  .   .  + .",
         "            'You Are Here'            .   .  +  . . .",
         ".                 |             .  .   .    .    . .",
         "                  |           .     .     . +.    +  .",
-        "                 \|/              .       .   . .",
+        "                 \\|/              .       .   . .",
         "        . .       V          .    * . . .  .  +   .",
         "           +      .           .   .      +     .",
         "                            .       . +  .+. .",
@@ -53,7 +56,7 @@ def checkfiles():
 
 def login():
     username = input('instabot> Username: ')
-    password = input('instabot> Password: ')
+    password = getpass.getpass('instabot> Password: ')
 
     if username == YOUR_USERNAME:
         loadfollowfile()
@@ -63,7 +66,12 @@ def login():
     api = (InstagramAPI(username, password))
     if api.login():
         print("Login successful.")
-        time.sleep(1)
+        api.getSelfUsernameInfo()
+        user = api.LastJson['user']
+        global followers_count, following_count
+        followers_count = user['follower_count']
+        following_count = user['following_count']
+        time.sleep(0.5)
         os.system("cls")
     else:
         print("Cannot login, please check your credentials.")
@@ -101,58 +109,80 @@ def savefiles():
             print("Cannot create file.")
 
 
+def progressbar(percentage, info=''):
+
+    percent = 100 * percentage
+    if percent > 100:
+        percent = 100
+    if percent > 2:
+        percent /= 2
+
+    percent = int(percent) + 1
+    perstr = "█"
+    for _ in range(percent):
+        perstr += "█"
+
+    print("%{:.2f} {}{:51.51}{} {:17.17}".format(percentage*100, "[", perstr, "]", info), end='\r')
+
+
 def peoplefollowingme():
     try:
+        progressbar(0, 'Followers')
+        i = 0
         followers = []
         next_max_id = ''
-        print("Scanning followers...")
         while 1:
             api.getUserFollowers(api.username_id, next_max_id)
             temp = api.LastJson
 
             for item in temp["users"]:
                 followers.append(item)
+                i += 1
+                progressbar(i / followers_count, str(i) + ' Followers')
 
             try:
                 next_max_id = temp["next_max_id"]
                 if 'none' in str(next_max_id).lower():
-                    print("Followers scanned.")
-
+                    print("\n")
                     for follow in followers:
                         followersID.append(follow["pk"])
                         this_p = [follow["pk"], follow["username"]]
                         followerslonglist.append(this_p)
                     return
-            except:
-                print("Couldn't get next_max_id.")
-
-    except Exception as e:
+            except Exception as e:
+                print("Couldn't get next_max_id." + str(e))
+    except:
         print("couldn't refresh, please try later.")
 
 
 def peopleifollow():
-    following = []
-    next_max_id = ''
-    print("Scanning followings...")
-    while 1:
-        api.getUserFollowings(api.username_id, next_max_id)
-        temp = api.LastJson
+    try:
+        progressbar(0, 'Followings')
+        i = 0
+        following = []
+        next_max_id = ''
+        while 1:
+            api.getUserFollowings(api.username_id, next_max_id)
+            temp = api.LastJson
 
-        for item in temp["users"]:
-            following.append(item)
+            for item in temp["users"]:
+                following.append(item)
+                i += 1
+                progressbar(i / following_count, str(i) + ' Followings')
 
-        try:
-            next_max_id = temp["next_max_id"]
-            if 'none' in str(next_max_id).lower():
-                print("Followings scanned.")
-
-                for follow in following:
-                    followingID.append(follow["pk"])
-                    this_p = [follow["pk"], follow["username"]]
-                    followinglonglist.append(this_p)
-                return
-        except:
-            print("Couldn't get next_max_id.")
+            try:
+                next_max_id = temp["next_max_id"]
+                if 'none' in str(next_max_id).lower():
+                    print("\n")
+                    for follow in following:
+                        followingID.append(follow["pk"])
+                        this_p = [follow["pk"], follow["username"]]
+                        followinglonglist.append(this_p)
+                    return
+            except:
+                print("Couldn't get next_max_id.")
+    except:
+        print("couldn't refresh, please try later.")
 
 
 def peoplenotfollowingme(fo_ing, fo_ers):
@@ -181,16 +211,17 @@ def unfollowlist(ulist):
     print("Unfollowing list...")
     for account in ulist:
         try:
-            printusername(account)
             api.unfollow(account)
-            i = i+1
-            time.sleep(random.randint(0,2))
+            i += 1
+            progressbar(i/len(ulist), getusername(account))
+            time.sleep(random.randint(0, 2))
             if "Please wait" in str(api.LastResponse):
                 print("Can't unfollow, please wait a few minutes before you try again")
                 return i
-        except:
-            print("Can't unfollow, please try later")
+        except Exception as e:
+            print("\nCan't unfollow, please try later")
             return i
+    print('\n')
     return i
 
 
@@ -200,26 +231,26 @@ def showunfollowers():
 
 
 def deleteunfollowers():
-    if len(unfollowersID)==0:
+    if len(unfollowersID) == 0:
         print("No unfollowers")
     else:
-        print("Done. {0} people unfollowed".format(unfollowlist(unfollowersID)))
+        print("\n Done. {0} people unfollowed\n".format(unfollowlist(unfollowersID)))
 
 
 def deleteList():
     updatelists()
     try:
-        checkList = []
+        checklist = []
         file1 = open("check.txt", "r")
         for eachfollowing in file1:
             try:
                 for i in range(0, len(followinglonglist) - 1, 1):
                     if str(eachfollowing[:-1]) in str(followinglonglist[i][1]):
-                        checkList.append(followinglonglist[i][0])
+                        checklist.append(followinglonglist[i][0])
             except:
                 pass
         file1.close()
-        unfollowlist(checkList)
+        unfollowlist(checklist)
     except Exception as e:
         print(e)
 
@@ -235,11 +266,11 @@ def followLikers(m_id):
             user_name = eachUser['username']
             if checkTarget(pk):
                 api.follow(pk)
-                _thread.start_new_thread(likeUserFeed, ("likeuserfeed",pk))
-                print("{0}. ".format(indx),end='')
+                _thread.start_new_thread(likeUserFeed, ("likeuserfeed", pk))
+                print("{0}. ".format(indx), end='')
                 print("{0}".format(user_name))
-                indx=indx+1
-                time.sleep(random.randint(5,15))
+                indx = indx+1
+                time.sleep(random.randint(5, 15))
         print("{} people followed.".format(indx))
     except Exception as error:
         print("FollowLikers: {0}".format(error))
@@ -261,7 +292,7 @@ def followpeoplebyhashtag(threadName, hashtag):
                 this_p = [postuserID, userName]
                 followinglonglist.append(this_p)
                 api.like(postID)
-                time.sleep(random.randint(1,3))
+                time.sleep(random.randint(1, 3))
                 print("Followed {0}".format(userName))
                 total = total+1
 
@@ -288,12 +319,13 @@ def profileFollow(threadName, username):
     _thread.exit()
 
 
-def automatic(threadname,h_tag):
+def automatic(threadname, h_tag):
     loadfollowfile()
     try:
         api.getHashtagFeed(h_tag)
         media_array = []
         j = 0
+
         selectedindex = 0
 
         print("Loading Media...")
@@ -339,24 +371,24 @@ def likeUserFeed(threadname, u_id):
             howmanyposts = api.LastJson['num_results']
             if howmanyposts > 0:
                 for i in range(0, howmanyposts, 1):
-                    if i == 3:
+                    if i == 3:  # break out of the funct after the first 3 posts
                         return
                     media_id = feed[i]['pk']
                     if not feed[i]['has_liked']:
                         api.like(media_id)
                         if i == 0:
                             addComment(media_id, feed[i])
-                        time.sleep(random.randint(1,3))
+                        time.sleep(random.randint(1, 3))
     except:
         print("...", end='\r')
     _thread.exit()
 
 
 def likeExplore(threadName, multithread):
-    i=0
-    next_max=' '
+    i = 0
+    next_max = ' '
 
-    while i<100:
+    while i < 100:
         api.explore(next_max)
         next_max = api.LastJson['next_max_id']
         for eachJsonObj in api.LastJson['items']:
@@ -364,9 +396,9 @@ def likeExplore(threadName, multithread):
                 media_id = eachJsonObj['media']['pk']
                 if not eachJsonObj['media']['has_liked']:
                     api.like(media_id)
-                    i=i+1
+                    i = i + 1
                     time.sleep(random.randint(2, 4))
-                    print("...\t\t",end = '\r')
+                    print("...\t\t", end='\r')
             except:
                 continue
     print("Liking from explore process ended. {0} pictures liked".format(i))
@@ -387,7 +419,7 @@ def likeFeed(threadName, multithread):
                 if not eachJsonObject['has_liked']:
                     api.like(postID)
                     posts = posts+1
-                    time.sleep(random.randint(2,6))
+                    time.sleep(random.randint(2, 6))
         except:
             print("...\t\t", end='\r')
     print("\nLiked {0} picture(s) from feed.".format(posts))
@@ -396,7 +428,7 @@ def likeFeed(threadName, multithread):
 
 def likeHashtag(threadName, hashtag):
     api.getHashtagFeed(hashtag)
-    i =0
+    i = 0
     try:
         for eachJsonObject in api.LastJson['items']:
             media_id = eachJsonObject['caption']['media_id']
@@ -404,7 +436,7 @@ def likeHashtag(threadName, hashtag):
             if checkMedia("like", eachJsonObject, 0, 1000):
                 if not eachJsonObject['has_liked']:
                     api.like(media_id)
-                    i=i+1
+                    i = i+1
                     time.sleep(random.randint(3, 6))
     except:
         print("...\t\t", end='\r')
@@ -414,7 +446,7 @@ def likeHashtag(threadName, hashtag):
 
 def commentHashtag(threadName, hashtag):
     api.getHashtagFeed(hashtag)
-    i=0
+    i = 0
     try:
         for eachJsonObject in api.LastJson['items']:
             media_id = eachJsonObject['caption']['media_id']
@@ -423,7 +455,7 @@ def commentHashtag(threadName, hashtag):
                 if not eachJsonObject['has_liked']:
                     api.like(media_id)
                     addComment(media_id, eachJsonObject)
-                    i=i+1
+                    i = i + 1
                 time.sleep(random.randint(10, 20))
     except:
         print("...", end='\r')
@@ -432,11 +464,10 @@ def commentHashtag(threadName, hashtag):
 
 
 def addComment(m_id, jsonObject):
-
     writestuff = comments[random.randint(0, len(comments) - 1)]
 
     try:
-        #albania coordinates
+        # albania coordinates
         lat = float(jsonObject['location']['lat'])
         lng = float(jsonObject['location']['lng'])
 
@@ -460,11 +491,11 @@ def checkTarget(u_id):
     try:
         flr = api.LastJson['user']['follower_count']
         flng = api.LastJson['user']['following_count']
-        if flr > 1500 or flr < 70 or flng > 1500 or flng < 70 :
+        if flr > 1500 or flr < 70 or flng > 1500 or flng < 70:
             return False
-        if flr - flng > 600 :
+        if flr - flng > 600:
             return False
-        if flr/flng > 4 :
+        if flr/flng > 4:
             return False
         return True
     except:
@@ -513,7 +544,7 @@ def checkMedia(threadName, jsonObject, minim, maxim):
 
 def checkTime(timevalue, minim, maxim):
     ct = time.time()
-    if ct-timevalue in range (minim, maxim):
+    if ct-timevalue in range(minim, maxim):
             return True
     return False
 
@@ -536,10 +567,11 @@ def checkQuality(jsonObject):
 def checkThis():
     updatelists()
 
-    filez = open("check.txt", "w")
+    filez = open("check.txt", "a")
     for eachitem in followinglonglist:
         if checkWhitelist(eachitem[0]):
-                filez.write(str(eachitem[1])+ "\n")
+                filez.write(str(eachitem[1]) + "\n")
+        time.sleep(random.randint(0, 3))
     filez.close()
 
 
@@ -559,20 +591,31 @@ def updatelists():
     whitelist.clear()
     peoplefollowingme()
     peopleifollow()
-    peoplenotfollowingme(followingID,followersID)
+    peoplenotfollowingme(followingID, followersID)
     whiteListed()
+    showstats()
 
 
 def showstats():
-    print("{0} followers".format(len(followersID)))
-    print("{0} following".format(len(followingID)))
-    print("{0} unfollowing".format(len(unfollowersID)))
+    print("\n  {:10} {:10} {:10}\n  {:11s}{:11s}{}\n".format("Followers", "Following", "Unfollowing",
+                                                     str(len(followersID)),
+                                                     str(len(followingID)),
+                                                     str(len(unfollowersID))
+                                                     )
+          )
 
 
 def printusername(idnumber):
     for i in range(0, len(followinglonglist) - 1, 1):
         if idnumber == followinglonglist[i][0]:
-            print(str(followinglonglist[i][0]) + "\t:\t" + str(followinglonglist[i][1]))
+            print("{:12}:  {}".format(str(followinglonglist[i][0]), str(followinglonglist[i][1])))
+
+
+def getusername(idnumber):
+    for i in range(0, len(followinglonglist) - 1, 1):
+        if idnumber == followinglonglist[i][0]:
+            return str(followinglonglist[i][1])
+    return "not found"
 
 
 def start():
@@ -689,7 +732,9 @@ def helper():
     print("---------------------------------------------------------------------")
 
 
-#### MAIN
+"""
+####    MAIN
+"""
 
 printart()
 checkfiles()
@@ -741,7 +786,9 @@ bannedHashtags = [
     "politican", "edirama", "rilindja", "erioveliaj"
 ]
 
-### SET LISTS
+"""
+###     SET LISTS
+"""
 
 followersID = []
 followingID = []
@@ -752,7 +799,9 @@ followinglonglist = []
 
 whitelist = []
 
-### RUN
+"""
+###     RUN
+"""
 
 login()
 start()

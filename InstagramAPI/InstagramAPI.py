@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-''' FORKED FROM LEVPASHA AND TWEAKED TO THIS BOT's NEEDS '''
-
 import requests
 import random
 import json
@@ -393,17 +391,20 @@ class InstagramAPI:
                     response = self.s.get(self.API_URL + endpoint, verify=verify)
                 break
             except Exception as e:
-                print('Except on SendRequest (wait 60 sec and resend): ' + str(e))
-                time.sleep(60)
+                if "ConnectionResetError".lower() in str(e).lower():
+                    print('Connection Reset Error(wait 10 sec and resend)',end='\r')
+                else:
+                    print("SENDREQUEST: " + str(e))
+                time.sleep(10)
 
         if response.status_code == 200:
             self.LastResponse = response
             self.LastJson = json.loads(response.text)
             return True
         elif response.status_code == 400:
-            print("400 BAD request")
+            print("BAD request(400error)", end= '\r')
         else:
-            print("Request return " + str(response.status_code) + " error!")
+            print("Request return " + str(response.status_code) + " error!", end='\r')
             time.sleep(15)
             try:
                 self.LastResponse = response
@@ -416,3 +417,5 @@ class InstagramAPI:
 
     def getPendingFollowRequests(self):
         return self.SendRequest('friendships/pending?')
+
+
