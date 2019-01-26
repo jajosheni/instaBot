@@ -12,5 +12,4 @@ setup(
     zip_safe=False,
     install_requires=[
         "requests==2.20.0",
-        "requests-toolbelt==0.7.0"
     ])
