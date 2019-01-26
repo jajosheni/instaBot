@@ -15,7 +15,6 @@ import sys
 from datetime import datetime
 import calendar
 import os
-from requests_toolbelt import MultipartEncoder
 
 # Turn off InsecureRequestWarning
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
