@@ -19,7 +19,7 @@
 <tfoot>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NOTES:</p></td>
-  <td class="tableblock halign-left valign-top"><p class="tableblock"><em>if you are using linux: replace <code>cls</code> with <code>clear</code></br>if you are using pycharm:  replace <code>getpass.getpass()</code> method with <code>input()</code></em></p></td>
+  <td class="tableblock halign-left valign-top"><p class="tableblock"><em>if you are using linux: replace <code>cls</code> with <code>clear</code><br>if you are using pycharm:  replace <code>getpass.getpass()</code> method with <code>input()</code></em></p></td>
 </tr>
 </tfoot>
 <tbody>
