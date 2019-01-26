@@ -89,7 +89,7 @@ def loadfollowfile():
                 pass
         followfile.close()
     except:
-        print(" ")
+        pass
 
 
 def savefiles():
@@ -111,9 +111,10 @@ def savefiles():
 
 def progressbar(percentage, info=''):
 
+    if percentage > float(0.99):
+        percentage = 1.0
     percent = 100 * percentage
-    if percent > 100:
-        percent = 100
+
     if percent > 2:
         percent /= 2
 
@@ -257,28 +258,31 @@ def deleteList():
 
 def followLikers(m_id):
     try:
+        i = 0
         print("Loading likers...")
         api.getMediaLikers(m_id)
-        print("{} Likers".format(api.LastJson['user_count']))
+        likers = api.LastJson['user_count']
+        print("{} Likers".format(likers))
         indx = 1
         for eachUser in api.LastJson['users']:
+            i += 1
             pk = eachUser['pk']
             user_name = eachUser['username']
+            progressbar(i / likers)
             if checkTarget(pk):
+                progressbar(i / likers, str(indx) + ". " + str(user_name))
                 api.follow(pk)
                 _thread.start_new_thread(likeUserFeed, ("likeuserfeed", pk))
-                print("{0}. ".format(indx), end='')
-                print("{0}".format(user_name))
                 indx = indx+1
                 time.sleep(random.randint(5, 15))
         print("{} people followed.".format(indx))
     except Exception as error:
-        print("FollowLikers: {0}".format(error))
+        print("FollowLikers: {}".format(error))
 
 
 def followpeoplebyhashtag(threadName, hashtag):
     total = 0
-    print("Scanning: #{0}".format(hashtag))
+    print("Scanning: #{}".format(hashtag))
     api.getHashtagFeed(hashtag)
 
     try:
@@ -298,7 +302,8 @@ def followpeoplebyhashtag(threadName, hashtag):
 
     except:
         pass
-    print("Followed {0} accounts...".format(total))
+
+    print("Followed {} accounts.".format(total))
     _thread.exit()
 
 
@@ -340,8 +345,7 @@ def automatic(threadname, h_tag):
                     media_array.append(this_media)
                     j = j + 1
             except TypeError:
-                print("...\t\t", end='\r')
-                continue
+                pass
 
         print("{} pictures choosed".format(j))
         maxpoint = media_array[0][1]
@@ -357,7 +361,7 @@ def automatic(threadname, h_tag):
         followLikers(media_array[selectedindex][0])
         print("Automatic: done\ninstabot> ")
     except Exception as error:
-        print("Automatic-error: {0}".format(error))
+        print("Automatic: {}".format(error))
     _thread.exit()
 
 
@@ -380,14 +384,14 @@ def likeUserFeed(threadname, u_id):
                             addComment(media_id, feed[i])
                         time.sleep(random.randint(1, 3))
     except:
-        print("...", end='\r')
+        pass
     _thread.exit()
 
 
 def likeExplore(threadName, multithread):
     i = 0
     next_max = ' '
-
+    print("Liking Posts from Explore", end='\n')
     while i < 100:
         api.explore(next_max)
         next_max = api.LastJson['next_max_id']
@@ -399,8 +403,9 @@ def likeExplore(threadName, multithread):
                     i = i + 1
                     time.sleep(random.randint(2, 4))
                     print("...\t\t", end='\r')
+                progressbar(i/100, "Like Explore Pics")
             except:
-                continue
+                pass
     print("Liking from explore process ended. {0} pictures liked".format(i))
     _thread.exit()
 
@@ -420,15 +425,18 @@ def likeFeed(threadName, multithread):
                     api.like(postID)
                     posts = posts+1
                     time.sleep(random.randint(2, 6))
+                progressbar(posts/100, "Liking Feed")
         except:
-            print("...\t\t", end='\r')
+            pass
     print("\nLiked {0} picture(s) from feed.".format(posts))
     _thread.exit()
 
 
 def likeHashtag(threadName, hashtag):
+    print("Liking Posts #" + str(hashtag), end='\n')
     api.getHashtagFeed(hashtag)
     i = 0
+    total = len(api.LastJson['items'])
     try:
         for eachJsonObject in api.LastJson['items']:
             media_id = eachJsonObject['caption']['media_id']
@@ -438,15 +446,18 @@ def likeHashtag(threadName, hashtag):
                     api.like(media_id)
                     i = i+1
                     time.sleep(random.randint(3, 6))
+            progressbar(i / total, "Like #" + str(hashtag))
     except:
-        print("...\t\t", end='\r')
+        pass
     print("likeHashtag process is over: {0} pictures liked".format(i))
     _thread.exit()
 
 
 def commentHashtag(threadName, hashtag):
+    print("Commenting Posts #" + str(hashtag), end='\n')
     api.getHashtagFeed(hashtag)
     i = 0
+    total = len(api.LastJson['items'])
     try:
         for eachJsonObject in api.LastJson['items']:
             media_id = eachJsonObject['caption']['media_id']
@@ -457,8 +468,9 @@ def commentHashtag(threadName, hashtag):
                     addComment(media_id, eachJsonObject)
                     i = i + 1
                 time.sleep(random.randint(10, 20))
+            progressbar(i / total, "Comment #" + str(hashtag))
     except:
-        print("...", end='\r')
+        pass
     print("commentHashtag process is over: {0} pictures commented".format(i))
     _thread.exit()
 
