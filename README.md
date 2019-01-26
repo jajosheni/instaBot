@@ -18,8 +18,8 @@
 </thead>
 <tfoot>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">NOTE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>if you are using <strong>pycharm</strong>:  replace getpass.getpass() method with input()</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOTES:</p></td>
+  <td class="tableblock halign-left valign-top"><p class="tableblock"><em>if you are using linux replace cls with clear</br>if you are using <strong>pycharm</strong>:  replace getpass.getpass() method with input()</em></p></td>
 </tr>
 </tfoot>
 <tbody>
