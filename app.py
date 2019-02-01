@@ -494,12 +494,12 @@ def addComment(m_id, jsonObject):
 
 def checkTarget(u_id):
 
-    api.getUsernameInfo(u_id)
+
 
     for eachacc in followingID:
         if int(u_id) == eachacc:
             return False
-
+    api.getUsernameInfo(u_id)
     try:
         flr = api.LastJson['user']['follower_count']
         flng = api.LastJson['user']['following_count']
