@@ -61,10 +61,10 @@ InstagramAPI URLs are changing so mediainfo was returning error 405.
   1. Added a new list of 'Albanian' comments and a location check function
      so pics with a location in Albania will get an Albanian comment.
   2. Added 3 text files:
-    • followings.txt - to keep track of who was followed (not to follow that account twice)\\
-    • whitelist.txt - whitelisted accounts\\
-    • check.txt - this list is defined by some conditions and will be deleted by `deletelist`\\
-    - CHANGE "YOUR_USERNAME" to your username inside the code.\\
+    • followings.txt - to keep track of who was followed (not to follow that account twice)</br>
+    • whitelist.txt - whitelisted accounts</br>
+    • check.txt - this list is defined by some conditions and will be deleted by `deletelist`</br>
+    - CHANGE "YOUR_USERNAME" to your username inside the code.</br>
   3. Added a clear screen command.
   4. Added a nice character art tweak.
   5. Added a `unfollowers` to see a list of who is unfollowing.
